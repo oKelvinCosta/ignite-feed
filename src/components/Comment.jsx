@@ -1,8 +1,27 @@
 import styles from "./Comment.module.css";
 import { Avatar } from "./Avatar";
 import { ThumbsUp, Trash } from "phosphor-react";
+import { useState } from "react";
 
-export function Comment() {
+export function Comment({ content, onDeleteComment }) {
+  const [likeCount, setLikeCount] = useState(0);
+
+  function handleDeleteComment() {
+    console.log("Deletar comentário");
+    onDeleteComment(content);
+  }
+
+  function handleLikeCount() {
+    // Permite acessar o valor mais recente do estado
+
+    // Se eu usasse setLikeCount do modo normal e eu precisasse usar a variável
+    // likeCount, ela estaria como 0
+    setLikeCount((state) => {
+      return state + 1;
+    });
+
+    console.log(likeCount);
+  }
   return (
     <div className={styles.comment}>
       <Avatar hasBorder={false} src="https://github.com/diego3g.png" alt="" />
@@ -16,18 +35,18 @@ export function Comment() {
               </time>
             </div>
 
-            <button title="Deletar comentário">
+            <button onClick={handleDeleteComment} title="Deletar comentário">
               <Trash size={24} />
             </button>
           </header>
 
-          <p>Muito bom Devon, parabéns!! 👏👏</p>
+          <p>{content}</p>
         </div>
 
         <footer>
-          <button>
+          <button onClick={handleLikeCount}>
             <ThumbsUp />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
