@@ -2,7 +2,7 @@ import styles from "./Post.module.css";
 import { Comment } from "./Comment";
 import { Avatar } from "./Avatar";
 import { format, formatDistanceToNow } from "date-fns";
-import ptBR from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale/pt-BR";
 import {
   useState,
   type ChangeEvent,
@@ -26,14 +26,25 @@ export interface PostType {
     role: string;
     avatarUrl: string;
   };
-  content: Content[]; // varios objetos com esse formato
+  content: Content[]; // several objects with this format
   publishedAt: Date;
 }
 
+/**
+ * A reusable post component.
+ *
+ * @param {object} props The component props.
+ * @param {PostType} props.post The post data.
+ */
 export function Post({ post }: PostProps) {
   const [comments, setComments] = useState(["muito legal!"]);
   const [newCommentText, setNewCommentText] = useState("");
 
+  /**
+   * Formats the published date.
+   *
+   * @returns {string} The formatted date.
+   */
   const publishedDateFormatted = format(
     post.publishedAt,
     "d 'de' LLLL 'às' HH:mm'h'",
@@ -47,18 +58,33 @@ export function Post({ post }: PostProps) {
     addSuffix: true,
   });
 
+  /**
+   * Handles the creation of a new comment.
+   *
+   * @param {FormEvent} event The form submission event.
+   */
   function handleCreateNewComment(event: FormEvent) {
     event.preventDefault();
     setComments([...comments, newCommentText]);
     setNewCommentText("");
   }
 
+  /**
+   * Handles the change of the new comment field.
+   *
+   * @param {ChangeEvent<HTMLTextAreaElement>} event The change event.
+   */
   function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
     const fieldValue = event.target.value;
     setNewCommentText(fieldValue);
     event.target.setCustomValidity("");
   }
 
+  /**
+   * Deletes a comment.
+   *
+   * @param {string} commentToDelete The comment to be deleted.
+   */
   function deleteComment(commentToDelete: string) {
     const commentsWithoutDeletedOne = comments.filter((comment) => {
       return comment !== commentToDelete;
@@ -67,8 +93,13 @@ export function Post({ post }: PostProps) {
     setComments(commentsWithoutDeletedOne);
   }
 
+  /**
+   * Handles the invalid event of the new comment field.
+   *
+   * @param {InvalidEvent<HTMLTextAreaElement>} event The invalid event.
+   */
   function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
-    event.target.setCustomValidity("Esse campo é obrigatorio");
+    event.target.setCustomValidity("This field is required");
   }
 
   const isNewCommentEmpty = newCommentText.length === 0;

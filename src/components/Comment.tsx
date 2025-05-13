@@ -8,6 +8,13 @@ interface CommentProps {
   onDeleteComment: (comment: string) => void;
 }
 
+/**
+ * A reusable comment component.
+ *
+ *
+ * @param {string} content The comment text.
+ * @param {function} onDeleteComment The delete comment event handler.
+ */
 export function Comment({ content, onDeleteComment }: CommentProps) {
   const [likeCount, setLikeCount] = useState(0);
 
@@ -16,15 +23,25 @@ export function Comment({ content, onDeleteComment }: CommentProps) {
     onDeleteComment(content);
   }
 
+  /**
+   * Handles the like count of a comment.
+   *
+   * @remarks
+   * Permits accessing the most recent state value.
+   *
+   * @example
+   * setLikeCount((state) => {
+   *   return state + 1;
+   * });
+   *
+   * console.log(likeCount); // 0
+   */
   function handleLikeCount() {
-    // Permite acessar o valor mais recente do estado
-
-    // Se eu usasse setLikeCount do modo normal e eu precisasse usar a variável
-    // likeCount, ela estaria como 0
     setLikeCount((state) => {
       return state + 1;
     });
 
+    // If I used setLikeCount in the normal way I would have the likeCounte value as 0
     console.log(likeCount);
   }
   return (
